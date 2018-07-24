@@ -1,0 +1,86 @@
+$def with (researchFeed, wikiFeed, wgpFeed, contact)
+$# Index page for insecta.info Site
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="///static.g30consultants.com/assets/g30.css" />
+    <title>Insect of the Day</title>
+    
+  </head>
+  <body>
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+      <div class="w3-bar w3-white w3-wide w3-padding w3-card-2">
+        <a href="#home" class="w3-bar-item w3-button"><b>G30</b> Consultants</a>
+        <!-- Float links to the right. Hide them on small screens -->
+        <div class="w3-right w3-hide-small">
+          <a href="#about" class="w3-bar-item w3-button">About</a>
+          <a href="#search"  class="w3-bar-item w3-button">Search</a>
+          <a href="#contact" class="w3-bar-item w3-button">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <!-- Header -->
+    <header class="w3-display-container w3-content w3-wide w3-padding-small w3-margin-top" style="max-width:1500px;" id="home">
+      <img class="w3-image" src="///static.g30consultants.com/assets/CleeHill.jpg" alt="Hero Image Clee Hill" width="1500" height="800">
+      <div class="w3-display-topleft w3-padding-48" >
+         <img class="w3-image" src="///static.g30consultants.com/assets/G30Logo.svg" />
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <div class="w3-content w3-padding" style="max-width:1564px">
+      <!-- About Section -->
+      <div class="w3-container w3-padding-32" id="about">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">
+        <h3>
+        </h3>
+      </div>
+      <!-- Projects Section -->
+      <div class="w3-container w3-padding-small" id="projects">
+        <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Projects</h2>
+        <div class="w3-col s4 w3-margin-bottom">
+          <div class="w3-row-padding">
+            <div class="w3-display-container">
+
+            </div>
+          </div>
+        </div>
+        <div class="w3-col s4 w3-margin-bottom">
+          <div class="w3-row-padding">
+            <div class="w3-display-container">
+
+            </div>
+          </div>
+        </div>
+        <div class="w3-col s4 w3-margin-bottom">
+          <div class="w3-row-padding">
+            <div class="w3-display-container">
+
+            </div>
+          </div>
+        </div>                    
+      </div>      
+      <div class="w3-container w3-padding-small" id="contact">
+        <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact Us</h2>        
+        <form name="main" method="post" class="g30-form"> 
+          $if not contact.valid: <p class="error">Try again</p> 
+          $:contact.render()
+          <label for = "contactButton">
+            <input type="submit" id="contactButton" value="Send Message"/>                
+          </label>
+        </form>        
+      </div>
+    <!-- End page content -->
+    </div>
+    <div id="footer" class="w3-display-container w3-content w3-wide w3-padding-small w3-margin-top " style="max-width:1500px; background-color:grey;">
+      <p>
+        This site and content is &copy 2017,2018 G30 Consultants Ltd unless otherwise indicated.
+      </p>
+    </div>
+  </body>
+
+  </html>
