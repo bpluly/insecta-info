@@ -5,18 +5,16 @@ sys.path.append(abspath)
 os.chdir(abspath)
 
 
-import web, feedparser
+import web
 from web import form
 from web import utils
-from HTMLParser import HTMLParser
 
-h = HTMLParser()
 render = web.template.render('templates/')
 validEmail = form.regexp('[^@]+@[^@]+\.[^@]+','This must be a valid email address')
 
 urls = (
     '/', 'index',
-    '/', 'index',
+    '/', 'index'
 )
 
 contactForm = form.Form(
