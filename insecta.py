@@ -33,7 +33,7 @@ class index:
       def POST(self):
         contact = contactForm()
         if not contact.validates():
-          return render.index(researchFeed, wikiFeed, contact)
+          return render.index(contact)
         else:
           name = contact.Name.get_value()
           email = contact.Email.get_value()
