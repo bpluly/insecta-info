@@ -1,0 +1,44 @@
+DROP TABLE public."NHM_Import";
+
+CREATE TABLE public."NHM_Import"
+(
+    subgenus character varying(16) COLLATE pg_catalog."default",
+    family character varying(32) COLLATE pg_catalog."default",
+    materialPrimaryTypeNumber character varying(10) COLLATE pg_catalog."default",
+    kindOfMaterial character varying(10) COLLATE pg_catalog."default",
+    phylum character varying(24) COLLATE pg_catalog."default",
+    GUID uuid,
+    materialTypes character varying(16) COLLATE pg_catalog."default",
+    media character varying(16) COLLATE pg_catalog."default",
+    multimedia character varying(16) COLLATE pg_catalog."default",
+    kindOfMedia character varying(16) COLLATE pg_catalog."default",
+    materialCount integer,
+    taxonRank character varying(16) COLLATE pg_catalog."default",
+    specificEpithet character varying(16) COLLATE pg_catalog."default",
+    imageCategory character varying(16) COLLATE pg_catalog."default",
+    kingdom character varying(16) COLLATE pg_catalog."default",
+    suborder character varying(16) COLLATE pg_catalog."default",
+    material character varying(10) COLLATE pg_catalog."default",
+    infraspecificEpithet character varying(16) COLLATE pg_catalog."default",
+    subfamily character varying(16) COLLATE pg_catalog."default",
+    class character varying(16) COLLATE pg_catalog."default",
+    superfamily character varying(24) COLLATE pg_catalog."default",
+    genus character varying(16) COLLATE pg_catalog."default",
+    created date,
+    type character varying(10) COLLATE pg_catalog."default",
+    modified date,
+    british character varying(10) COLLATE pg_catalog."default",
+    materialSex character varying(10) COLLATE pg_catalog."default",
+    scientificName character varying(60) COLLATE pg_catalog."default",
+    materialStage character varying(24) COLLATE pg_catalog."default",
+    _id bigint,
+    currentScientificName character varying(60) COLLATE pg_catalog."default",
+    order character varying(24) COLLATE pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public."NHM_Import"
+    OWNER to postgres;
