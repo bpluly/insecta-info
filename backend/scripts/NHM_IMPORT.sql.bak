@@ -28,7 +28,7 @@ CREATE TABLE public."NHM_Import"
     type character varying(10) COLLATE pg_catalog."default",
     modified date,
     british character varying(10) COLLATE pg_catalog."default",
-    materialSex character varying(10) COLLATE pg_catalog."default",
+    materialSex character varying(24) COLLATE pg_catalog."default",
     scientificName character varying(60) COLLATE pg_catalog."default",
     materialStage character varying(24) COLLATE pg_catalog."default",
     _id bigint,

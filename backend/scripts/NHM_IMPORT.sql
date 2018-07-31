@@ -25,14 +25,14 @@ CREATE TABLE public."NHM_Import"
     superfamily character varying(24) COLLATE pg_catalog."default",
     genus character varying(16) COLLATE pg_catalog."default",
     created date,
-    type character varying(24) COLLATE pg_catalog."default",
+    type character varying(10) COLLATE pg_catalog."default",
     modified date,
     british character varying(10) COLLATE pg_catalog."default",
-    materialSex character varying(10) COLLATE pg_catalog."default",
-    scientificName character varying(60) COLLATE pg_catalog."default",
+    materialSex character varying(24) COLLATE pg_catalog."default",
+    scientificName character varying(120) COLLATE pg_catalog."default",
     materialStage character varying(24) COLLATE pg_catalog."default",
     _id bigint,
-    currentScientificName character varying(60) COLLATE pg_catalog."default",
+    currentScientificName character varying(120) COLLATE pg_catalog."default",
     "order" character varying(24) COLLATE pg_catalog."default"
 )
 WITH (
