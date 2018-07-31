@@ -1,4 +1,4 @@
-DROP TABLE public."NHM_Import";
+--DROP TABLE public."NHM_Import";
 
 CREATE TABLE public."NHM_Import"
 (
@@ -33,7 +33,7 @@ CREATE TABLE public."NHM_Import"
     materialStage character varying(24) COLLATE pg_catalog."default",
     _id bigint,
     currentScientificName character varying(60) COLLATE pg_catalog."default",
-    order character varying(24) COLLATE pg_catalog."default"
+    "order" character varying(24) COLLATE pg_catalog."default"
 )
 WITH (
     OIDS = FALSE
