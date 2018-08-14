@@ -4,7 +4,7 @@
 
 
 
-import sys, os, re, types, ConfigParser, optparse, json
+import sys, os, re, types, configparser, optparse, json
 import psycopg2
 import logging
 import logging.handlers
