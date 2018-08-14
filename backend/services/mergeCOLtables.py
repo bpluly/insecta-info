@@ -158,6 +158,9 @@ def main():
 # Process<input type="radio" name="" value="" />
 #
     dbConnectionString = "host="+quote(db)+" dbname="+quote(dbname)+" user="+quote(dbuser)+" password="+quote(dbpassword)
+    if testing:
+      logger.debug('Connection string '+dbConnectionString)
+      
     try:
       dbConn = psycopg2.connect(dbConnectionString)
     except psycopg2.OperationalError as e:
