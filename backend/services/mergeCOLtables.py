@@ -207,72 +207,22 @@ def main():
     dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE '%col_%';")
     importTables = dbCursor.fetchall()
     for (importTable in importTables):
-      dbCursor.execute("select * from information_schema.columns WHERE table_name = %s;", (importTable['table_name'][1],)
-      rowFields = dbCursor.fetchall()
-      fieldstring = ""
-      for (schemaRow in rowFields):
-        fieldstring .=schemaRow[1][1]+","
-        
-      fieldstring = fieldstring[:-1]
-      
-      
-      # time.sleep(5)
-      dbCursor.execute("select * from "+importTable+";")
-      importRows = dbCursor.fetchall()
-      values = tuple(importRow[])
-      
-# Look for the taxonID, if it doesn't exist then INSERT the row
-      dbCursor.execute("SELECT taxonID from "insecta_taxon" WHERE taxonID = %s;", (taxonID,))
-      if testing == False:
-        queryString = "INSERT INTO  ("+fieldString+")"+valuesString
-        if dbCursor.rowcount == 0:
-          logger.info('%s %s' % (status, taxonID,))
-
-          dbCursor.execute(queryString,values)
-          dbConn.commit()
-        else:
-
-          queryString = "UPDATE article_categories SET " +updateString+" WHERE pii = "+"'"+pii+"'"
-          if verbose == True:
-            logger.info(queryString)
-          dbCursor.execute(queryString, values,)
-          if verbose == True:
-            logger.info('Rows affected = %d' % (dbCursor.rowcount))
-          dbConn.commit()
-      else:
-        queryString = "INSERT INTO article_categories ("+fieldString+")"+valuesString
-        values = tuple(row["value"] for row in articleList)
-        valueList = list(values)
-        valueList.insert(0, pii)
-        valueList.append(timestamp)
-        valueList.append(status)
-        values = tuple(valueList)
-        logger.info('Would run %s,( %s ))\n' % (queryString, values,))
-
-# Now the category record has been created process the EID and CI content and create child records
-
-      for row in ciList:
-        childRegex = re.compile(row["regexstring"])
-        if testing == False:
-          createCIRow(pii,row["Category"], childRegex.findall(content), dbCursor)
-        else:
-          ciTestList = childRegex.findall(content)
-          if ciTestList:
-            logger.info('Would insert PII %s and %s %s into the CI table.\n' % (pii,row["Category"], childRegex.findall(content),))
-          else:
-            logger.info('No insertion on PII %s for %s \n' % (pii,row["Category"],))
-
-      if testing == False:
-        createMediaRow(pii,extension.findall(content), eid.findall(content), dbCursor)
-      else:
-        eidTestList = eid.findall(content)
-        if eidTestList:
-          logger.info('Would insert PII %s and %s %s into the media table.\n' % (pii,extension.findall(content), eid.findall(content),))
-        else:
-          logger.info('No insertion on PII %s for %s, %s \n' % (pii,extension.findall(content), eid.findall(content),))
-      if testing == False:
-        readQueue.delete_message(updateMessage)
-# end of the PII loop
+      if ("taxon" in importTable['table_name'][1]):
+        queryString = """Insert into "insecta_taxon" SELECT uuid_generate_v1mc() as "insectaID", "taxonID", identifier, "datasetID", "datasetName", "acceptedNameUsageID", "parentNameUsageID", "taxonomicStatus",
+                                  "taxonRank", "verbatimTaxonRank", "scientificName", kingdom, phylum, class, "order", superfamily, family, "genericName", genus, subgenus, "specificEpithet",
+                  "infraspecificEpithet", "scientificNameAuthorship", source, "namePublishedIn", "nameAccordingTo", modified, description, "taxonConceptID", "scientificNameID", 
+                  "references", "isExtinct","""
+      if ("distribution" in importTable['table_name'][1]):
+        queryString = """"Insert into "insecta_distribution" SELECT taxonID", "locationID", locality, "occurrenceStatus", "establishmentMeans", """
+      if ("description" in importTable['table_name'][1]):
+        queryString = """Insert into "insecta_description" SELECT "taxonID", locality, """
+      if ("reference" in importTable['table_name'][1]):      
+        queryString = """Insert into "insecta_reference" SELECT "taxonID", locality, """
+      if ("vernacular" in importTable['table_name'][1]):)
+         queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
+         
+      queryString .= '"'+importTable+'"' + 'as "sourceTable", current_date as "dateCreate" FROM '+ '"'+importTable+'";'
+      dbCursor.execute(queryString)       
 
     dbConn.close()
     PrevProcDateTime = getconfigstring(config, 'Log', 'PrevProcDateTime')
