@@ -139,7 +139,7 @@ def main():
     else:
       logger.setLevel(logging.INFO)
 
-    loghandler = logging.handlers.FileHandler('mergeCOLtables')
+    loghandler = logging.handlers.FileHandler(logfilename)
     logger.addHandler(loghandler)
 
 
