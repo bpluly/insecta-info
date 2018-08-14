@@ -161,7 +161,7 @@ def main():
     try:
       dbConn = psycopg2.connect(dbConnectionString)
     except psycopg2.OperationalError as e:
-      error(e.)
+      error(e)
     else:
       print(dbname,"connected.")
     dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
