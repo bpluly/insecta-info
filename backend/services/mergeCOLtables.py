@@ -81,17 +81,6 @@ def incSecond(currentDate):
     delta =  timedelta(seconds=1)
     return currentDate + delta
 
-def readKey(keyValue, bucket):
-    """ Read a key from the bucket
-    """
-    if bucket.get_key(keyValue) == None:
-      logger.error('PII %s not found' % (keyValue,))
-      return ""
-
-    sampleKey = Key(bucket)
-    sampleKey.key = keyValue
-    return sampleKey.get_contents_as_string()
-
 def quote(sourceString):
     """ wrap the sourceString in quotes
     """
@@ -112,39 +101,6 @@ def makeBoolValue(inList):
     else:
       return True
 
-def createMediaRow(pii,extensionList, eidList, dbCursor):
-    rows = len(extensionList)
-    for row in range(0, rows):
-      extension = extensionList[row][:9]
-      dbCursor.execute("SELECT eid from media WHERE eid = %s;", (eidList[row],))
-      if dbCursor.rowcount == 0:
-        dbCursor.execute("INSERT INTO media (pii, extension, eid) VALUES (%s, %s, %s)",
-                        (pii, extension,eidList[row]))
-
-def createCIRow(pii, fieldname, ciList, dbCursor):
-    rows = len(ciList)
-    for row in range(0, rows):
-      dbCursor.execute("SELECT pii from ci WHERE pii = %s AND ci_name = %s;", (pii,fieldname))
-      if dbCursor.rowcount == 0:
-        dbCursor.execute("INSERT INTO ci (pii, ci_name, ci_present) VALUES (%s, %s, %s)",
-                        (pii, fieldname, True))
-
-def handleDeleted(pii, status, content, dbCursor, readQueue, updateMessage):
-  """ Deleted records may have empty content as it has been deleted from the bucket already
-      this function side steps the problem and either updates an existing row in the database
-      or inserts a new one.
-  """
-  dbCursor.execute("SELECT pii from article_categories WHERE pii = %s;", (pii,))
-  logger.info('%s %s' % (status, pii,))
-  if testing == False:
-    if dbCursor.rowcount == 0:
-      dbCursor.execute("INSERT INTO article_categories (pii, status) VALUES (%s, %s)", (pii, status))
-    else:
-      dbCursor.execute("UPDATE article_categories set status = "+"'"+status+"' WHERE pii = "+ "'"+pii+"'")
-    readQueue.delete_message(updateMessage)
-
-
-
 class TZ(tzinfo):
     """ Fixup the datetime for isoformat to show the TZ correctly
         ie: 2010-02-09T18:49:14+00:00
@@ -156,7 +112,7 @@ class TZ(tzinfo):
 
 def main():
     """
-    Process all of the available imported tables that match the pattern in .
+    Process all of the available imported tables that match the pattern in --pattern parameter.
     For each row see if it exists in the core taxon table, if not create it
     otherwise merge the content into the existing row.
     """
