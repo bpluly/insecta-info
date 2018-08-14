@@ -125,7 +125,7 @@ def main():
     (options, args) = parser.parse_args()
     stripTags = re.compile(r'<[^<]*?>')
     stripBadChar = re.compile(r'\x19')
-    config = configparser.safeconfigparser()
+    config = configparser.ConfigParser()
     config.read(CONFIGFILE)
 
     verbose = getboolean(config, 'Configure', 'verbose')
