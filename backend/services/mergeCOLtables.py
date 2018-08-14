@@ -180,7 +180,7 @@ def main():
         queryString = """Insert into "insecta_description" SELECT "taxonID", locality, """
       if ("reference" in importTable['table_name'][1]):      
         queryString = """Insert into "insecta_reference" SELECT "taxonID", locality, """
-      if ("vernacular" in importTable['table_name'][1]):)
+      if ("vernacular" in importTable['table_name'][1]):
          queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
          
       queryString .= '"'+importTable+'"' + 'as "sourceTable", current_date as "dateCreate" FROM '+ '"'+importTable+'";'
