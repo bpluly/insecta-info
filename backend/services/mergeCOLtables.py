@@ -139,7 +139,7 @@ def main():
     else:
       logger.setLevel(logging.INFO)
 
-    loghandler = logging.handlers.FileHandler(logfilename)
+    loghandler = logging.FileHandler(logfilename)
     logger.addHandler(loghandler)
 
 

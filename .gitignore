@@ -5,3 +5,4 @@ insecta.py.bak
 *.cnf
 templates/index.html.bak
 *.bak
+*.log
