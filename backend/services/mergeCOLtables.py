@@ -167,7 +167,7 @@ def main():
       error(e)
     else:
       print(dbname,"connected.")
-    dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    dbCursor = dbConn.cursor(cursor_factory=none)
 
     dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE '%col_%';")
     importTables = dbCursor.fetchall()
