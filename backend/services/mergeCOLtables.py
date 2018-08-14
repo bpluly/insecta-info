@@ -157,7 +157,7 @@ def main():
 #
 # Process<input type="radio" name="" value="" />
 #
-    dbConnectionString = "host="+quote(db)+" dbname="+quote(dbname)+" user="+quote(dbuser)+" password="+quote(dbpassword)
+    dbConnectionString = "host="+quote(db)+" port="+quote(dbport)+" dbname="+quote(dbname)+" user="+quote(dbuser)+" password="+quote(dbpassword)
     if testing:
       logger.debug('Connection string '+dbConnectionString)
       
