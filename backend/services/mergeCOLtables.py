@@ -18,7 +18,7 @@ import time
 
 NAME = "mergeCOLtables"
 CONFIGFILE = "insecta.cnf"
-# logger = logging.getLogger('SDFEPublish-Logger')
+logger = logging.getLogger('Insecta.mergeCOLtables')
 testing = False
 verbose = False
 
@@ -138,7 +138,7 @@ def main():
     else:
       logger.setLevel(logging.INFO)
 
-    loghandler = logging.handlers.SysLogHandler(address = '/dev/log')
+    loghandler = logging.handlers.FileHandler('mergeCOLtables')
     logger.addHandler(loghandler)
 
 
