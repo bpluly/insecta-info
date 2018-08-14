@@ -130,6 +130,7 @@ def main():
 
     verbose = getboolean(config, 'Configure', 'verbose')
     testing = getboolean(config, 'Configure', 'testing')
+    logfilename = getconfigstring(config, 'Log', 'logfilename')
 
     if verbose == True:
       logger.setLevel(logging.INFO)
