@@ -24,7 +24,7 @@ verbose = False
 
 def error(s):
     """output an error and take an early bath."""
-    print >> sys.stderr, "%s: %s" % (NAME, s)
+    print("%s: %s" % (NAME, s),file=sys.stderr)
     if (logger):
       logger.error('%s: %s' % (NAME, s))
     sys.exit(1)
@@ -157,7 +157,12 @@ def main():
 # Process<input type="radio" name="" value="" />
 #
     dbConnectionString = "host="+quote(db)+" dbname="+quote(dbname)+" user="+quote(dbuser)+" password="+quote(dbpassword)
-    dbConn = psycopg2.connect(dbConnectionString)
+    try:
+      dbConn = psycopg2.connect(dbConnectionString)
+    except psycopg2.OperationalError as e:
+      error(e.)
+    else:
+      print(dbname,"connected.")
     dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE '%col_%';")
@@ -178,7 +183,14 @@ def main():
          queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
          
       queryString .= '"'+importTable+'"' + 'as "sourceTable", current_date as "dateCreate" FROM '+ '"'+importTable+'";'
-      dbCursor.execute(queryString)       
+      if testing:
+        logger.debug("Would execute "+queryString)
+      else:
+        try:
+          dbCursor.execute(queryString)       
+        except psycopg2.OperationalError as e:
+          error(e)
+          
 
     dbConn.close()
     PrevProcDateTime = getconfigstring(config, 'Log', 'PrevProcDateTime')
