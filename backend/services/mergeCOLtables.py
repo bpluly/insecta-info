@@ -35,9 +35,9 @@ def getconfigstring(config, section, key):
     keyvalue = ""
     try:
       keyvalue = config.get(section, key)
-    except ConfigParser.NoSectionError:
+    except configparser.NoSectionError:
       error("Error: Unable to find section %s." % (section))
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
       error("Error: Unable to find option %s." % (key))
 
     return keyvalue
@@ -47,9 +47,9 @@ def getconfigint(config, section, key):
     errorMessage = "Error: "
     try:
       keyvalue = config.getint(section, key)
-    except ConfigParser.NoSectionError:
+    except configparser.NoSectionError:
       error("Error: Unable to find section %s." % (section))
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
       error("Error: Unable to find option %s." % (key))
 
     return keyvalue
@@ -57,9 +57,9 @@ def getconfigint(config, section, key):
 def getboolean(config, section, key):
     try:
         keyvalue = config.getboolean(section, key)
-    except ConfigParser.NoSectionError:
+    except configparser.NoSectionError:
       error("Error: Unable to find section %s." % (section))
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
       error("Error: Unable to find option %s." % (key))
 
     return keyvalue
@@ -68,7 +68,7 @@ def putconfigstring(config, section, key):
     """helper function to write a section key"""
     try:
         config.set(section, key)
-    except ConfigParser.NoSectionError:
+    except configparser.NoSectionError:
       error("Error: Unable to find section %s." % (section))
 
 def updateConfig(config, ProcUpToDateTime):
@@ -125,7 +125,7 @@ def main():
     (options, args) = parser.parse_args()
     stripTags = re.compile(r'<[^<]*?>')
     stripBadChar = re.compile(r'\x19')
-    config = ConfigParser.SafeConfigParser()
+    config = configparser.safeconfigparser()
     config.read(CONFIGFILE)
 
     verbose = getboolean(config, 'Configure', 'verbose')
