@@ -14,6 +14,7 @@ from optparse import OptionParser
 from datetime import datetime, tzinfo, timedelta
 from time import strptime
 from optparse import OptionParser
+from psycopg2 import extras
 import time
 
 NAME = "mergeCOLtables"
@@ -167,7 +168,7 @@ def main():
       error(e)
     else:
       print(dbname,"connected.")
-    dbCursor = dbConn.cursor(cursor_factory=none)
+    dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE '%col_%';")
     importTables = dbCursor.fetchall()
