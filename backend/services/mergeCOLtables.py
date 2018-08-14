@@ -168,7 +168,7 @@ def main():
 
     dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE '%col_%';")
     importTables = dbCursor.fetchall()
-    for (importTable in importTables):
+    for importTable in importTables:
       if ("taxon" in importTable['table_name'][1]):
         queryString = """Insert into "insecta_taxon" SELECT uuid_generate_v1mc() as "insectaID", "taxonID", identifier, "datasetID", "datasetName", "acceptedNameUsageID", "parentNameUsageID", "taxonomicStatus",
                                   "taxonRank", "verbatimTaxonRank", "scientificName", kingdom, phylum, class, "order", superfamily, family, "genericName", genus, subgenus, "specificEpithet",
