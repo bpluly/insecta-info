@@ -222,8 +222,8 @@ def main():
           dbConn.commit()
           if verbose:
             logger.info("All transactions committed.")
-         except: psycopg2.OperationalError as e:
-            error(e)
+        except: psycopg2.OperationalError as e:
+          error(e)
             
         
 
