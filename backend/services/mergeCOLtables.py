@@ -169,37 +169,55 @@ def main():
     else:
       print(dbname,"connected.")
     dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    if options.pattern != None:
+      likeString = "'%"+options.pattern+"%'"
+    else:
+      likeString = ""'%col_%'""
 
-    dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE '%col_%';")
+    if testing:
+      logger.debug('Selecting '+likeString)
+      
+    dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE "+likeString+";")
     importTables = dbCursor.fetchall()
+
+    queryString = ""
     for importTable in importTables:
-      if ("taxon" in importTable['table_name'][1]):
+      tableName = importTable['table_name']
+      ProcUpToDateTime = datetime.now()
+      logger.info('Import Table '+tableName)
+      if ("taxon" in tableName):
         queryString = """Insert into "insecta_taxon" SELECT uuid_generate_v1mc() as "insectaID", "taxonID", identifier, "datasetID", "datasetName", "acceptedNameUsageID", "parentNameUsageID", "taxonomicStatus",
                                   "taxonRank", "verbatimTaxonRank", "scientificName", kingdom, phylum, class, "order", superfamily, family, "genericName", genus, subgenus, "specificEpithet",
                   "infraspecificEpithet", "scientificNameAuthorship", source, "namePublishedIn", "nameAccordingTo", modified, description, "taxonConceptID", "scientificNameID", 
                   "references", "isExtinct","""
-      if ("distribution" in importTable['table_name'][1]):
-        queryString = """"Insert into "insecta_distribution" SELECT taxonID", "locationID", locality, "occurrenceStatus", "establishmentMeans", """
-      if ("description" in importTable['table_name'][1]):
+      if ("distribution" in tableName):
+        queryString = """Insert into "insecta_distribution" SELECT "taxonID", "locationID", locality, "occurrenceStatus", "establishmentMeans", """
+      if ("description" in tableName):
         queryString = """Insert into "insecta_description" SELECT "taxonID", locality, """
-      if ("reference" in importTable['table_name'][1]):      
+      if ("reference" in tableName):      
         queryString = """Insert into "insecta_reference" SELECT "taxonID", locality, """
-      if ("vernacular" in importTable['table_name'][1]):
+      if ("vernacular" in tableName):
          queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
          
-      queryString += '"'+importTable+'"' + 'as "sourceTable", current_date as "dateCreate" FROM '+ '"'+importTable+'";'
+      queryString += '"'+tableName+'"' + 'as "sourceTable", current_date as "dateCreate" FROM '+ "'"+tableName+"'"+'';'
+
+      if verbose:
+        print("Importing "+tableName)
+        logger.info("Importing "+tableName)
       if testing:
-        logger.debug("Would execute "+queryString)
+        logger.info("Would execute "+queryString)
       else:
         try:
-          dbCursor.execute(queryString)       
+          dbCursor.execute(queryString)
+          if verbose:
+            print("Imported "+tableName)
+            logger.info("Imported "+tableName)
         except psycopg2.OperationalError as e:
           error(e)
           
 
     dbConn.close()
-    PrevProcDateTime = getconfigstring(config, 'Log', 'PrevProcDateTime')
-    updateConfig(config, ProcUpToDateTime)
 
 if __name__ == "__main__":
     main()
