@@ -200,7 +200,7 @@ def main():
       if ("vernacular" in tableName):
          queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
          
-      queryString += '"'+tableName+'"' + 'as "sourceTable", current_date as "dateCreate" FROM '+ "'"+tableName+"'"+'';'
+      queryString += "'"+tableName+"'" + 'as "sourceTable", current_date as "dateCreate" FROM '+ '"'+tableName+'"'+';'
 
       if verbose:
         print("Importing "+tableName)
