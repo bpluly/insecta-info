@@ -216,8 +216,18 @@ def main():
         except psycopg2.OperationalError as e:
           error(e)
           
+      try:
+        print("Committing transactions.")
+        dbConn.commit()
+        if verbose:
+          logger.info("All transactions committed.")
+       except: psycopg2.OperationalError as e:
+          error(e)
+          
+        
 
     dbConn.close()
+    print("Merge of tables complete.")
 
 if __name__ == "__main__":
     main()
