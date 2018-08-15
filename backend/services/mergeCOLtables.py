@@ -146,7 +146,7 @@ def main():
 
 
     if testing:
-      logger.debug('Test Run')
+      logger.info('Test Run')
 
     PrevProcDateTime = getconfigstring(config, 'Log', 'PrevProcDateTime')
     db = getconfigstring(config,'Database', 'host')
@@ -216,7 +216,7 @@ def main():
         except psycopg2.OperationalError as e:
           error(e)
       
-      if !testing:    
+      if testing == False:    
         try:
           print("Committing transactions.")
           dbConn.commit()
