@@ -215,15 +215,16 @@ def main():
             logger.info("Imported "+tableName)
         except psycopg2.OperationalError as e:
           error(e)
-          
-      try:
-        print("Committing transactions.")
-        dbConn.commit()
-        if verbose:
-          logger.info("All transactions committed.")
-       except: psycopg2.OperationalError as e:
-          error(e)
-          
+      
+      if !testing:    
+        try:
+          print("Committing transactions.")
+          dbConn.commit()
+          if verbose:
+            logger.info("All transactions committed.")
+         except: psycopg2.OperationalError as e:
+            error(e)
+            
         
 
     dbConn.close()
