@@ -196,7 +196,7 @@ def main():
       if ("description" in tableName):
         queryString = """Insert into "insecta_description" SELECT "taxonID", locality, """
       if ("reference" in tableName):      
-        queryString = """Insert into "insecta_reference" SELECT "taxonID", locality, """
+        queryString = """Insert into "insecta_reference" SELECT "taxonID", creator, date, title, description, identifier, type, """
       if ("vernacular" in tableName):
          queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
          
