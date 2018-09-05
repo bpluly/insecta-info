@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# mergeCOLtables.py
+# importNHME.py
 
 
 
-import sys, os, re, types, configparser, optparse, json
+import sys, os, re, types, configparser, optparse, json, csv
 import psycopg2
 import logging
 import logging.handlers
@@ -13,12 +13,11 @@ from collections import defaultdict
 from optparse import OptionParser
 from datetime import datetime, tzinfo, timedelta
 from time import strptime
-from optparse import OptionParser
 from psycopg2 import extras
 import time
 
-NAME = "mergeCOLtables"
-CONFIGFILE = "insecta.cnf"
+NAME = "importNHME"
+CONFIGFILE = "insecta_NHM.cnf"
 logger = logging.getLogger('Insecta.mergeCOLtables')
 testing = False
 verbose = False
@@ -86,6 +85,11 @@ def quote(sourceString):
     """ wrap the sourceString in quotes
     """
     return "'"+sourceString+"'"
+    
+def doublequote(sourceString):
+    """ wrap the sourceString in quotes
+    """
+    return '"'+sourceString+'"'    
 
 def makeValue(inList):
     """ return the first string in the list or "" if its empty
@@ -102,6 +106,13 @@ def makeBoolValue(inList):
     else:
       return True
 
+def rowString(row):
+    valueString = ""
+    for k, value in row.items():
+      valueString += value+","
+    return(valueString)
+
+
 class TZ(tzinfo):
     """ Fixup the datetime for isoformat to show the TZ correctly
         ie: 2010-02-09T18:49:14+00:00
@@ -113,15 +124,24 @@ class TZ(tzinfo):
 
 def main():
     """
-    Process all of the available imported tables that match the pattern in --pattern parameter.
-    For each row see if it exists in the core taxon table, if not create it
-    otherwise merge the content into the existing row.
+    Import the Etymology CSV file, handling JSON and any odd strings
     """
     usage = "usage: %prog -f/--file file"
+    csvFile = ""
+    tableName = ""
+    createTable = False
+    
 
     parser = OptionParser(usage)
     parser.add_option("-p", "--pattern", dest="pattern",
                     help="pattern of import tables to process")
+    parser.add_option("-f","--file", dest="csvFile",
+                    help="file to import.")
+    parser.add_option("-t","--table", dest="tableName",
+                    help="table to import into.")
+    parser.add_option("-c","--create", action = 'store_true', default = False, dest="createTable",
+                    help="Create the table to import into.")
+                    
 
     (options, args) = parser.parse_args()
     stripTags = re.compile(r'<[^<]*?>')
@@ -132,6 +152,8 @@ def main():
     verbose = getboolean(config, 'Configure', 'verbose')
     testing = getboolean(config, 'Configure', 'testing')
     logfilename = getconfigstring(config, 'Log', 'logfilename')
+
+    print("csvFile = "+options.csvFile)
 
     if verbose == True:
       logger.setLevel(logging.INFO)
@@ -170,62 +192,30 @@ def main():
       print(dbname,"connected.")
     dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-    if options.pattern != None:
-      likeString = "'%"+options.pattern+"%'"
-    else:
-      likeString = ""'%col_%'""
+# open the csv file
 
-    if testing:
-      logger.debug('Selecting '+likeString)
-      
-    dbCursor.execute("select table_schema, table_name from information_schema.tables WHERE table_name LIKE "+likeString+";")
-    importTables = dbCursor.fetchall()
-
-    queryString = ""
-    for importTable in importTables:
-      tableName = importTable['table_name']
-      ProcUpToDateTime = datetime.now()
-      logger.info('Import Table '+tableName)
-      if ("taxon" in tableName):
-        queryString = """Insert into "insecta_taxon" SELECT uuid_generate_v1mc() as "insectaID", "taxonID", identifier, "datasetID", "datasetName", "acceptedNameUsageID", "parentNameUsageID", "taxonomicStatus",
-                                  "taxonRank", "verbatimTaxonRank", "scientificName", kingdom, phylum, class, "order", superfamily, family, "genericName", genus, subgenus, "specificEpithet",
-                  "infraspecificEpithet", "scientificNameAuthorship", source, "namePublishedIn", "nameAccordingTo", modified, description, "taxonConceptID", "scientificNameID", 
-                  "references", "isExtinct","""
-      if ("distribution" in tableName):
-        queryString = """Insert into "insecta_distribution" SELECT "taxonID", "locationID", locality, "occurrenceStatus", "establishmentMeans", """
-      if ("description" in tableName):
-        queryString = """Insert into "insecta_description" SELECT "taxonID", locality, """
-      if ("reference" in tableName):      
-        queryString = """Insert into "insecta_reference" SELECT "taxonID", creator, date, title, description, identifier, type, """
-      if ("vernacular" in tableName):
-         queryString = """Insert into "insecta_vernacular" SELECT "taxonID", "vernacularName", language, "countryCode", locality, transliteration, """
-         
-      queryString += "'"+tableName+"'" + 'as "sourceTable", current_date as "dateCreate" FROM '+ '"'+tableName+'"'+';'
-
-      if verbose:
-        print("Importing "+tableName)
-        logger.info("Importing "+tableName)
-      if testing:
-        logger.info("Would execute "+queryString)
-      else:
-        try:
-          dbCursor.execute(queryString)
-          if verbose:
-            print("Imported "+tableName)
-            logger.info("Imported "+tableName)
-        except psycopg2.OperationalError as e:
-          error(e)
-      
-      if testing == False:    
-        print("Committing transactions.")
-        try:
-          dbConn.commit()
-          if verbose:
-            logger.info("All transactions committed.")
-        except psycopg2.OperationalError as e:
-          error(e)
+    with open(options.csvFile) as csvfile:
+      NHMReader = csv.DictReader(csvfile,delimiter=',',quotechar='"')
+      fieldList = ""
+      allFields = next(NHMReader)
+      for field in allFields:
+        fieldList += doublequote(field)
+      insertStringbase = """INSERT INTO "NHM_Occurrence"("""+fieldList+"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s"
+      print(insertStringbase)
+      for row in NHMReader:
+        if testing == False:
+          try:
+            dbCursor.execute(insertStringbase,row)
+          except psycopg2.OperationalError as e:
+            error(e)
             
-        
+          try:
+            dbConn.cmmit()
+          except psycopg2.OperationalError as e:
+            error(e)
+        else:
+          print("Would Insert using "+rowString(row))
+
 
     dbConn.close()
     print("Merge of tables complete.")
