@@ -109,7 +109,10 @@ def makeBoolValue(inList):
 def rowString(row):
     valueString = ""
     for k, value in row.items():
-      valueString += value+","
+      try:
+        valueString += value+","
+      except:
+        error("Failed on"+value)
     return(valueString)
 
 
@@ -190,7 +193,7 @@ def main():
       error(e)
     else:
       print(dbname,"connected.")
-    dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     
 # open the csv file
 
@@ -210,7 +213,7 @@ def main():
             error(e)
             
           try:
-            dbConn.cmmit()
+            dbConn.commit()
           except psycopg2.OperationalError as e:
             error(e)
         else:
