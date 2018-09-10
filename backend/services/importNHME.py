@@ -18,7 +18,7 @@ import time
 
 NAME = "importNHME"
 CONFIGFILE = "insecta_NHM.cnf"
-logger = logging.getLogger('Insecta.mergeCOLtables')
+logger = logging.getLogger('Insecta.imporNHMtables')
 testing = False
 verbose = False
 
@@ -109,7 +109,10 @@ def makeBoolValue(inList):
 def rowString(row):
     valueString = ""
     for k, value in row.items():
-      valueString += value+","
+      try:
+        valueString += value+","
+      except:
+        error(value)
     return(valueString)
 
 
@@ -190,7 +193,7 @@ def main():
       error(e)
     else:
       print(dbname,"connected.")
-    dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    dbCursor = dbConn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     
 # open the csv file
 
@@ -199,18 +202,21 @@ def main():
       fieldList = ""
       allFields = next(NHMReader)
       for field in allFields:
-        fieldList += doublequote(field)
-      insertStringbase = """INSERT INTO "NHM_Occurrence"("""+fieldList+"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s"
+        fieldList += doublequote(field)+","
+
+      fieldList = fieldList.strip(",")
+
+      insertStringbase = """INSERT INTO "NHM_Occurrence"("""+fieldList+" VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
       print(insertStringbase)
       for row in NHMReader:
         if testing == False:
           try:
-            dbCursor.execute(insertStringbase,row)
+            dbCursor.execute(insertStringbase,row.items())
           except psycopg2.OperationalError as e:
             error(e)
             
           try:
-            dbConn.cmmit()
+            dbConn.commit()
           except psycopg2.OperationalError as e:
             error(e)
         else:
