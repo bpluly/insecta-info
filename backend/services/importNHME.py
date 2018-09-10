@@ -211,7 +211,7 @@ def main():
       for row in NHMReader:
         if testing == False:
           try:
-            dbCursor.execute(insertStringbase,row.items())
+            dbCursor.execute(insertStringbase,row.values()
           except psycopg2.OperationalError as e:
             error(e)
             
