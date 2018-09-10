@@ -18,7 +18,7 @@ import time
 
 NAME = "importNHME"
 CONFIGFILE = "insecta_NHM.cnf"
-logger = logging.getLogger('Insecta.imporNHMtables')
+logger = logging.getLogger('Insecta.mergeCOLtables')
 testing = False
 verbose = False
 
@@ -112,7 +112,7 @@ def rowString(row):
       try:
         valueString += value+","
       except:
-        error(value)
+        error("Failed on"+value)
     return(valueString)
 
 
@@ -202,16 +202,13 @@ def main():
       fieldList = ""
       allFields = next(NHMReader)
       for field in allFields:
-        fieldList += doublequote(field)+","
-
-      fieldList = fieldList.strip(",")
-
-      insertStringbase = """INSERT INTO "NHM_Occurrence"("""+fieldList+" VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        fieldList += doublequote(field)
+      insertStringbase = """INSERT INTO "NHM_Occurrence"("""+fieldList+"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s"
       print(insertStringbase)
       for row in NHMReader:
         if testing == False:
           try:
-            dbCursor.execute(insertStringbase,row.values()
+            dbCursor.execute(insertStringbase,row.values())
           except psycopg2.OperationalError as e:
             error(e)
             
