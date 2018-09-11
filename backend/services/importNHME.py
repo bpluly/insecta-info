@@ -202,7 +202,8 @@ def main():
       fieldList = ""
       allFields = next(NHMReader)
       for field in allFields:
-        fieldList += doublequote(field)
+        fieldList += doublequote(field)+","
+      fieldList = fieldList.trim(",")
       insertStringbase = """INSERT INTO "NHM_Occurrence" ("""+fieldList+") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
       print(insertStringbase)
       for row in NHMReader:
