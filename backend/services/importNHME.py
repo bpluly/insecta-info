@@ -210,6 +210,7 @@ def main():
         if testing == False:
           try:
             dbCursor.execute(insertStringbase,row)
+            print(row[1])
           except psycopg2.OperationalError as e:
             error(e)
             
