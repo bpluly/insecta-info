@@ -198,7 +198,7 @@ def main():
 # open the csv file
 
     with open(options.csvFile) as csvfile:
-      NHMReader = csv.DictReader(csvfile,delimiter=',',quotechar='"')
+      NHMReader = csv.reader(csvfile,delimiter=',',quotechar='"')
       fieldList = ""
       allFields = next(NHMReader)
       for field in allFields:
@@ -208,16 +208,18 @@ def main():
       for row in NHMReader:
         if testing == False:
           try:
-            dbCursor.execute(insertStringbase,rowString(row))
+            dbCursor.execute(insertStringbase,row)
           except psycopg2.OperationalError as e:
             error(e)
             
-          try:
-            dbConn.commit()
-          except psycopg2.OperationalError as e:
-            error(e)
         else:
           print("Would Insert using "+rowString(row))
+          
+      if testing == False:
+        try:
+          dbConn.commit()
+        except psycopg2.OperationalError as e:
+          error(e)
 
 
     dbConn.close()
