@@ -214,7 +214,8 @@ def main():
             error(e)
             
         else:
-          print("Would Insert using "+*row,sep=',')
+          print("Would Insert using ")
+          print(*row,sep=',')
           
       if testing == False:
         try:
