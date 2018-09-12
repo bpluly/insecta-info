@@ -207,10 +207,12 @@ def main():
       insertStringbase = """INSERT INTO "NHM_Occurrence" ("""+fieldList+") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
       print(insertStringbase)
       for row in NHMReader:
+#       replace all empty fields with None
+        row = [None if cell == '' else cell for cell in row] 
         if testing == False:
           try:
+            print(row)
             dbCursor.execute(insertStringbase,tuple(row))
-            print(row[1])
           except psycopg2.OperationalError as e:
             error(e)
             
