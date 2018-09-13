@@ -215,6 +215,7 @@ def main():
             print(row[0])
             dbCursor.execute(insertStringbase,tuple(row))
           except psycopg2.OperationalError as e:
+            print(row)
             error(e)
             
         else:
