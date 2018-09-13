@@ -131,6 +131,7 @@ def main():
     """
     usage = "usage: %prog -f/--file file"
     csvFile = ""
+    csv.register_dialect('NHM', delimiter=",", quotechar="'" )
     tableName = ""
     createTable = False
     
@@ -198,7 +199,7 @@ def main():
 # open the csv file
 
     with open(options.csvFile) as csvfile:
-      NHMReader = csv.reader(csvfile,delimiter=',',quotechar='"')
+      NHMReader = csv.reader(csvfile, 'NHM')
       fieldList = ""
       allFields = next(NHMReader)
       for field in allFields:
