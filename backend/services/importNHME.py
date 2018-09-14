@@ -212,7 +212,7 @@ def main():
         row = [None if cell == '' else cell for cell in row] 
         if testing == False:
           try:
-            print(row[0])
+            print(row[0],"Fields = ", len(row))
             dbCursor.execute(insertStringbase,tuple(row))
           except psycopg2.OperationalError as e:
             error(e)
