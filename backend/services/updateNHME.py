@@ -126,7 +126,7 @@ def updateOccurrence(cursor, fieldList, fieldValues):
         sql.Placeholder(name='id')
         )
 
-    print("updateOccurrence:".join(updateStringbase))
+    print("updateOccurrence:"+updateStringbase)
     if testing == False:
       try:
         if verbose:
