@@ -14,6 +14,7 @@ from optparse import OptionParser
 from datetime import datetime, tzinfo, timedelta
 from time import strptime
 from psycopg2 import extras
+from psycopg2 import sql
 import time
 
 NAME = "importNHME"
