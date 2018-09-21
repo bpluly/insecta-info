@@ -125,8 +125,8 @@ def updateOccurrence(cursor, fieldList, fieldValues):
         sql.Identifier("NHM_Occurrence"),
         sql.Placeholder(name='id')
         )
-    if verbose:
-      print("updateOccurrence:".join(updateStringbase))
+
+    print("updateOccurrence:".join(updateStringbase))
     if testing == False:
       try:
         if verbose:
