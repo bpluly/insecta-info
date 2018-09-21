@@ -131,7 +131,7 @@ def updateOccurrence(cursor, fieldList, fieldValues):
           print(row)
           
         cursor.execute(updateStringbase, {"id": row[0]})
-      exception:
+      except:
         # for whatever reason
         return False
       return True
