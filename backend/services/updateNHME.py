@@ -130,7 +130,7 @@ def updateOccurrence(cursor, fieldList, fieldValues):
     print(testing)
     if testing == False:
       try:
-        cursor.execute(updateStringbase, {"id": row[0]})
+        cursor.execute(updateStringbase, {"id": fieldValues[0]})
       except psycopg2.OperationalError as e:
         print(e)
         return False
