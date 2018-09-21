@@ -116,7 +116,7 @@ def rowString(row):
         error("Failed on"+value)
     return(valueString)
 
-def updateOccurrence(cursor, fieldList, fieldValues):
+def updateOccurrence(dbcursor, fieldList, row):
     """ Update the current row from the csv list
         return true for updated, false for not """
 
@@ -126,11 +126,13 @@ def updateOccurrence(cursor, fieldList, fieldValues):
         sql.Placeholder(name='id')
         )
 
-    print("updateOccurrence:")
+    if verbose:
+      print("updateOccurrence:")
+      print(row,sep=',')
     print(testing)
     if testing == False:
       try:
-        cursor.execute(updateStringbase, {"id": fieldValues[0]})
+        dbcursor.execute(updateStringbase, {"id": row[0]})
       except psycopg2.OperationalError as e:
         print(e)
         return False
