@@ -126,7 +126,7 @@ def updateOccurrence(dbcursor, fieldList, row):
         sql.Placeholder(name='id')
         )
 
-    if verbose:
+    if verbose == True:
       print("updateOccurrence:")
       print(row,sep=',')
     print(testing)
