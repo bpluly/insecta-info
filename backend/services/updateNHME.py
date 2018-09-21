@@ -127,6 +127,7 @@ def updateOccurrence(cursor, fieldList, fieldValues):
         )
 
     print("updateOccurrence:")
+    print(testing)
     if testing == False:
       try:
         if verbose:
