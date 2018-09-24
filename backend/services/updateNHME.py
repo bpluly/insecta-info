@@ -120,14 +120,12 @@ def updateOccurrence(dbcursor, fieldList, row):
     """ Update the current row from the csv list
         return true for updated, false for not """
 
-    print(fieldList)
-    print(row)
     updateStringbase = sql.SQL("UPDATE {} FROM {} WHERE id = {}").format(
         sql.SQL(",").join(map(sql.Identifier, fieldList)),
         sql.Identifier("NHM_Occurrence"),
         sql.Placeholder(name='id')
         )
-
+    print(updateStringbase)
     if verbose == True:
       print("updateOccurrence:")
       print(row,sep=',')
