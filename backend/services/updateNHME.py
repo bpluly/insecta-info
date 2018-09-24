@@ -116,7 +116,7 @@ def rowString(row):
         error("Failed on"+value)
     return(valueString)
 
-def updateOccurrence(dbcursor, fieldList, row):
+def updateOccurrence(dbConn, dbcursor, fieldList, row):
     """ Update the current row from the csv list
         return true for updated, false for not """
 
@@ -125,7 +125,7 @@ def updateOccurrence(dbcursor, fieldList, row):
         sql.Identifier("NHM_Occurrence"),
         sql.Placeholder(name='id')
         )
-    print(updateStringbase)
+    print(updateStringbase.as_string(dbConn))
     if verbose == True:
       print("updateOccurrence:")
       print(row,sep=',')
@@ -249,7 +249,7 @@ def main():
 #       replace all empty fields with None
         row = [None if cell == '' else cell for cell in row] 
         if testing == False:
-          if updateOccurrence(dbCursor, fieldList, row):
+          if updateOccurrence(dbConn, dbCursor, fieldList, row):
             try:
               dbConn.commit()
             except psycopg2.OperationalError as e:
