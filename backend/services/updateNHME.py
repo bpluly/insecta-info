@@ -251,7 +251,7 @@ def main():
 #       replace all empty fields with None
         row = [None if cell == '' else cell for cell in row] 
         if testing == False:
-          if updateOccurrence(dbConn, dbCursor, fieldList, row):
+          if updateOccurrence(dbConn, dbCursor, list(fieldList), row):
             try:
               dbConn.commit()
             except psycopg2.OperationalError as e:
