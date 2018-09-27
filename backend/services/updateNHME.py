@@ -120,7 +120,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     """ Update the current row from the csv list
         return true for updated, false for not """
         
-    print("fieldList:".join(fieldList))
+    print('[%s]' % ', '.join(map(str, fieldList)))
 
     updateStringbase = sql.SQL("UPDATE {} FROM {} WHERE id = {}").format(
         sql.SQL(",").join(map(sql.Identifier, fieldList)),
