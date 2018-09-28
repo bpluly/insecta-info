@@ -126,12 +126,12 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         )
 
     if verbose == True:
-      print("Mogrify:".join(dbcursor.mogrify(updateStringbase, row)))
+      print(dbcursor.mogrify(updateStringbase, row)))
 
     print(testing)
     if testing == False:
       try:
-        dbcursor.execute(updateStringbase, {row[0]})
+        print(dbcursor.execute(updateStringbase, {row[0]}))
       except psycopg2.OperationalError as e:
         print(e)
         return False
