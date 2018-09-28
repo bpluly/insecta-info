@@ -122,19 +122,18 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         
     print('[%s]' % ', '.join(map(str, fieldList)))
 
-    updateStringbase = sql.SQL("UPDATE {} FROM {} WHERE id = {}").format(
+    updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET({})=(%s) WHERE id = {}").format(
         sql.SQL(",").join(map(sql.Identifier, fieldList)),
-        sql.Identifier("NHM_Occurrence"),
         sql.Placeholder(name='id')
         )
-    print(updateStringbase.as_string(dbConn))
+
     if verbose == True:
       print("updateOccurrence:")
       print(row,sep=',')
     print(testing)
     if testing == False:
       try:
-        dbcursor.execute(updateStringbase, {"id": row[0]})
+        dbcursor.execute(updateStringbase, {row[0]})
       except psycopg2.OperationalError as e:
         print(e)
         return False
@@ -145,8 +144,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
       return True
     else:
       if verbose:
-        print(updateStringbase)
-        print(row)
+        print(dbcursor.mogrify(updateStringbase. row))
       logger.debug("Updating:".join(row))
       return False
 
