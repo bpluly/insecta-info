@@ -119,8 +119,6 @@ def rowString(row):
 def updateOccurrence(dbConn, dbcursor, fieldList, row):
     """ Update the current row from the csv list
         return true for updated, false for not """
-        
-    print('[%s]' % ', '.join(map(str, fieldList)))
 
     updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET({})=(%s) WHERE id = {}").format(
         sql.SQL(",").join(map(sql.Identifier, fieldList)),
@@ -128,8 +126,8 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         )
 
     if verbose == True:
-      print("updateOccurrence:")
-      print(row,sep=',')
+      print(dbcursor.mogrify(updateStringbase. row))
+
     print(testing)
     if testing == False:
       try:
