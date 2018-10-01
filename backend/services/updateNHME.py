@@ -127,6 +127,8 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
 
     if verbose == True:
       print(dbcursor.mogrify(updateStringbase, row)))
+      print(updateStringbase)
+      print(row)
 
     print(testing)
     if testing == False:
