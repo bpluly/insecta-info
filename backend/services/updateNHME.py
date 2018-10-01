@@ -125,10 +125,10 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         sql.Placeholder(name='id')
         )
 
-    if verbose == True:
-      print(dbcursor.mogrify(updateStringbase, row))
-      print(updateStringbase)
-      print(row)
+#    if verbose == True:
+    print(dbcursor.mogrify(updateStringbase, row))
+    print(updateStringbase)
+    print(row)
 
     print(testing)
     if testing == False:
