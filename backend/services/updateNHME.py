@@ -124,7 +124,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         sql.SQL(",").join(map(sql.Identifier, fieldList)),row[0])
 
 #    if verbose == True:
-    print(updateStringbase)
+    logger.info(updateStringbase)
 
     if testing == False:
       try:
