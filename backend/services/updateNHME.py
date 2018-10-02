@@ -130,7 +130,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
       try:
         logger.info("UPDATE:"+row[0])
         print(row)
-        dbcursor.execute(updateStringbase, row)
+        dbcursor.execute(updateStringbase, tuple(row))
       except psycopg2.OperationalError as e:
         logger.exception("UPDATE FAILED:")
         return False
@@ -212,9 +212,6 @@ def main():
     dbuser = getconfigstring(config,'Database', 'user')
     dbpassword = getconfigstring(config,'Database', 'password')
 
-#
-# Process<input type="radio" name="" value="" />
-#
     dbConnectionString = "host="+quote(db)+" port="+quote(dbport)+" dbname="+quote(dbname)+" user="+quote(dbuser)+" password="+quote(dbpassword)
     if testing:
       logger.debug('Connection string '+dbConnectionString)
