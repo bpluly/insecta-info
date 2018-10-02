@@ -130,6 +130,8 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     if testing == False:
       try:
         logger.info("UPDATE:"+row[0])
+        if verbose == True:
+          dbcursor.mogrify(updateStringbase, row)
         dbcursor.execute(updateStringbase, row)
       except psycopg2.OperationalError as e:
         logger.exception("UPDATE FAILED:")
@@ -238,9 +240,6 @@ def main():
       fieldList = fieldList.rstrip(',')
       insertStringbase = """INSERT INTO "NHM_Occurrence" ("""+fieldList+") VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-      if verbose:
-        print(insertStringbase)
-        
       for row in NHMReader:
 #       replace all empty fields with None
         row = [None if cell == '' else cell for cell in row] 
@@ -254,6 +253,7 @@ def main():
                 
           try:
             if verbose:
+              print(insertStringbase)
               print(row[0],"Fields = ", len(row))
             dbCursor.execute(insertStringbase,tuple(row))
           except psycopg2.OperationalError as e:
