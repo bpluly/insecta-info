@@ -120,10 +120,8 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     """ Update the current row from the csv list
         return true for updated, false for not """
 
-    updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET ({})=(%s) WHERE id = {}").format(
-        sql.SQL(",").join(map(sql.Identifier, fieldList)),
-        sql.Placeholder(name='id')
-        )
+    updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET ({})=(%s) WHERE id = %s").format(
+        sql.SQL(",").join(map(sql.Identifier, fieldList)),row[0])
 
 #    if verbose == True:
 #    print(dbcursor.mogrify(updateStringbase, row))
@@ -133,7 +131,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     print(testing)
     if testing == False:
       try:
-        print(dbcursor.execute(updateStringbase, {row[0]}))
+        dbcursor.execute(updateStringbase, {row})
       except psycopg2.OperationalError as e:
         print(e)
         return False
