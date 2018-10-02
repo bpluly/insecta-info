@@ -126,7 +126,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
 #    if verbose == True:
     logger.info("FieldList:"+str(len(fieldList)))
     logger.info(updateStringbase)
-    logger.info("Row content:".join(row))
+    logger.info("Row content:%s",row)
 
     if testing == False:
       try:
