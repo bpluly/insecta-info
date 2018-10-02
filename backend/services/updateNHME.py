@@ -123,9 +123,8 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET ({})=(%s) WHERE id = %s").format(
         sql.SQL(",").join(map(sql.Identifier, fieldList)),row[0])
 
-    if verbose == True:
-      print(updateStringbase)
-      print(row)
+#    if verbose == True:
+    print(updateStringbase)
 
     if testing == False:
       try:
