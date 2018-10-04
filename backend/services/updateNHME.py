@@ -121,7 +121,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         return true for updated, false for not """
 
     updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET ({0})=(%s) WHERE id = {1}").format(
-        sql.SQL(",").join(map(sql.Identifier, fieldList)),row[0])
+        sql.SQL(",").join(map(sql.Identifier, fieldList)),sql.Identifier(row[0]))
 
 #    if verbose == True:
     logger.info("FieldList:"+str(len(fieldList)))
