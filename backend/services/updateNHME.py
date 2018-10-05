@@ -121,8 +121,8 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
         return true for updated, false for not """
 
     id = row[0]
-    updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET ({0})=(%s) WHERE id = {1}").format(
-        sql.SQL(",").join(map(sql.Identifier, fieldList)),id)
+    updateStringbase = sql.SQL("UPDATE NHM_Occurrence SET ({})=(%s) WHERE id = {}").format(
+        sql.SQL(",").join(map(sql.Identifier, fieldList)),sql.Placeholder('name=id'))
 
 #    if verbose == True:
     logger.info("FieldList:"+str(len(fieldList)))
@@ -132,7 +132,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     if testing == False:
       try:
         logger.info("UPDATE:"+row[0])
-        dbcursor.execute(updateStringbase, tuple(row))
+        dbcursor.execute(updateStringbase, (tuple(row),{"id":row[0]})
       except psycopg2.OperationalError as e:
         logger.exception("UPDATE FAILED:")
         return False
