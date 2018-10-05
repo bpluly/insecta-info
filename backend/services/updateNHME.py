@@ -132,7 +132,7 @@ def updateOccurrence(dbConn, dbcursor, fieldList, row):
     if testing == False:
       try:
         logger.info("UPDATE:"+row[0])
-        dbcursor.execute(updateStringbase, (tuple(row)))
+        dbcursor.execute(updateStringbase, tuple(row))
       except psycopg2.OperationalError as e:
         logger.exception("UPDATE FAILED:")
         return False
